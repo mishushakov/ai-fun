@@ -6,9 +6,7 @@ import superjson from 'superjson'
 import fs from 'fs/promises'
 
 type AIFunctionExecutorOptions = {
-  packageFile?: string
   debug?: boolean
-  installPackages?: boolean
   esModules?: boolean
   cache?: boolean
   cacheFile?: string
