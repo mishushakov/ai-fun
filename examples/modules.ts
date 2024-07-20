@@ -1,15 +1,20 @@
 import { z } from 'zod'
 import AIFunctionExecutor from '../src'
+import NodeExec from '../src/backends/node'
 import { anthropic } from '@ai-sdk/anthropic'
 
 // Provide a LLM model
 const llm = anthropic.chat('claude-3-5-sonnet-20240620')
 
-// Create a new AI Function Executor
-const ai = new AIFunctionExecutor(llm, {
+const backend = new NodeExec({
   debug: true,
   packageFile: 'package.json',
   installPackages: true,
+})
+
+// Create a new AI Function Executor
+const ai = new AIFunctionExecutor(llm, backend, {
+  debug: true,
   esModules: true,
   cache: true,
   cacheFile: '.ai-function-executor.json',
