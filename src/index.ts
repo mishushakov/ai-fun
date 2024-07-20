@@ -35,28 +35,28 @@ export default class AIFunctionExecutor {
     const parametersSchema = zodToJsonSchema(parameters || z.null())
     const outputSchema = zodToJsonSchema(output || z.null())
 
-    const x = z.object({
+    const systemSchema = z.object({
       code: z.string(),
       npmModules: z.array(z.string()),
     })
 
-    // const { object } = await generateObject({
-    //   model: this.model,
-    //   system: `Provide a Node.js function that according to the given function signature. No comments, external packages are supported. Use function syntax. Your can only respond with code.`,
-    //   prompt: `
-    //   // ${description}
-    //   f(params: ${superjson.stringify(parametersSchema)}): ${JSON.stringify(
-    //     outputSchema
-    //   )}
-    //   `,
-    //   schema: x,
-    // })
+    const { object } = await generateObject({
+      model: this.model,
+      system: `Provide a Node.js function that according to the given function signature. No comments, external packages are supported. Use function syntax. Your can only respond with code.`,
+      prompt: `
+      // ${description}
+      f(params: ${superjson.stringify(parametersSchema)}): ${JSON.stringify(
+        outputSchema
+      )}
+      `,
+      schema: systemSchema,
+    })
 
     // mock
-    const object = {
-      code: `function f(params) { return params }`,
-      npmModules: ['pino'],
-    }
+    // const object = {
+    //   code: `function f(params) { return params }`,
+    //   npmModules: ['pino'],
+    // }
 
     if (this.options.debug === true) {
       console.log('code', object.code)
@@ -64,27 +64,26 @@ export default class AIFunctionExecutor {
     }
 
     if (object.npmModules.length > 0 && this.options.installPackages) {
-      const packageJsonDir = path.dirname(
-        this.options.packageFile || 'package.json'
-      )
+      let packageJsonObject = {
+        dependencies: {},
+      }
 
-      const packageJson = await fs.readFile(
-        this.options.packageFile || 'package.json',
-        'utf-8'
-      )
-      const packageJsonObject = JSON.parse(packageJson)
+      const packageJsonDir = path.dirname(this.options.packageFile || '.')
 
-      for (const packageName in packageJsonObject.dependencies) {
-        if (!object.npmModules.includes(packageName)) {
+      if (this.options.packageFile) {
+        const packageJson = await fs.readFile(this.options.packageFile, 'utf-8')
+        packageJsonObject = JSON.parse(packageJson)
+      }
+
+      for (const packageName of object.npmModules) {
+        if (!packageJsonObject.dependencies[packageName]) {
+          if (this.options.debug) console.log('installing package', packageName)
           exec(
             `npm install ${packageName}`,
             { cwd: packageJsonDir },
             (err, stdout) => {
-              if (err) {
-                console.error('error installing package', err)
-              }
-
-              console.log(stdout)
+              if (err) throw err
+              if (this.options.debug) console.log(stdout)
             }
           )
         }
