@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.30",
     "ai": "^3.2.32",
@@ -6,7 +7,13 @@
     "zod": "^3.23.8",
     "zod-to-json-schema": "^3.23.1"
   },
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node dist/modules.js"
+  },
   "devDependencies": {
-    "@types/node": "^20.14.11"
+    "@types/node": "^20.14.11",
+    "@types/react": "^18.3.3",
+    "typescript": "^5.5.3"
   }
 }
