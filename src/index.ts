@@ -1,61 +1,26 @@
 import { LanguageModelV1 } from '@ai-sdk/provider'
-import { generateObject, generateText } from 'ai'
+import { generateObject } from 'ai'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import vm from 'node:vm'
 import superjson from 'superjson'
 import fs from 'fs/promises'
-import { exec } from 'node:child_process'
-import path from 'node:path'
 
 type AIFunctionExecutorOptions = {
   packageFile?: string
   debug?: boolean
   installPackages?: boolean
   esModules?: boolean
-  backend?: 'exec'
   cache?: boolean
   cacheFile?: string
 }
 
-type CodeContent = {
+export type CodeContent = {
   code: string
   npmModules: string[]
 }
 
 type CacheContent = {
   [key: string]: CodeContent
-}
-
-async function installPackages(
-  npmModules: string[],
-  packageFile: string,
-  debug: boolean
-) {
-  let packageJsonObject = {
-    dependencies: {},
-  }
-
-  const packageJsonDir = path.dirname(packageFile || '.')
-
-  if (packageFile) {
-    const packageJson = await fs.readFile(packageFile, 'utf-8')
-    packageJsonObject = JSON.parse(packageJson)
-  }
-
-  for (const packageName of npmModules) {
-    if (!packageJsonObject.dependencies[packageName]) {
-      if (debug) console.log('installing package', packageName)
-      exec(
-        `npm install ${packageName}`,
-        { cwd: packageJsonDir },
-        (err, stdout) => {
-          if (err) throw err
-          if (debug) console.log(stdout)
-        }
-      )
-    }
-  }
 }
 
 async function generateCode(
@@ -97,21 +62,24 @@ async function generateCode(
   return object
 }
 
+export abstract class ExecutorBackend {
+  abstract exec(codeContent: CodeContent, params: any)
+}
+
 export default class AIFunctionExecutor {
   constructor(
     private model: LanguageModelV1,
+    private backend: ExecutorBackend,
     private options: AIFunctionExecutorOptions = {
       debug: false,
-      packageFile: 'package.json',
-      installPackages: true,
       esModules: false,
-      backend: 'exec',
       cache: true,
-      cacheFile: '.cache/ai-function-executor.json',
+      cacheFile: '.ai-function-executor.json',
     }
   ) {
     this.model = model
     this.options = options
+    this.backend = backend
   }
 
   async function<T extends z.AnyZodObject, O extends z.ZodTypeAny>(
@@ -159,19 +127,8 @@ export default class AIFunctionExecutor {
       console.log('packages', codeContent.npmModules)
     }
 
-    if (codeContent.npmModules.length > 0 && this.options.installPackages) {
-      await installPackages(
-        codeContent.npmModules,
-        this.options.packageFile,
-        this.options.debug
-      )
-    }
-
-    const script = new vm.Script(codeContent.code)
-    script.runInThisContext()
-
     return async (params?: z.infer<T>): Promise<z.infer<O>> => {
-      return vm.runInThisContext(`f(${superjson.stringify(params)})`)
+      return this.backend.exec(codeContent, params)
     }
   }
 }

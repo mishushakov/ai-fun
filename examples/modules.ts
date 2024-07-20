@@ -10,7 +10,9 @@ const ai = new AIFunctionExecutor(llm, {
   debug: true,
   packageFile: 'package.json',
   installPackages: true,
-  esModules: true
+  esModules: true,
+  cache: true,
+  cacheFile: '.ai-function-executor.json',
 })
 
 // Define the input parameters of the function
