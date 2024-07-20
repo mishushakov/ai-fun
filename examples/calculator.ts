@@ -6,9 +6,7 @@ import { anthropic } from '@ai-sdk/anthropic'
 const llm = anthropic.chat('claude-3-5-sonnet-20240620')
 
 // Create a new AI Function Executor
-const ai = new AIFunctionExecutor(llm, {
-  debug: true,
-})
+const ai = new AIFunctionExecutor(llm)
 
 // Define the input parameters and output parameters of the function
 const parameters = z.object({ a: z.number(), b: z.number() })
