@@ -5,7 +5,7 @@ import { zodToJsonSchema } from 'zod-to-json-schema'
 import superjson from 'superjson'
 import fs from 'fs/promises'
 
-type AIFunctionExecutorOptions = {
+type AIFunctionBuilderOptions = {
   debug?: boolean
   esModules?: boolean
   cache?: boolean
@@ -26,7 +26,7 @@ async function generateCode(
   description: string,
   parameters: z.AnyZodObject,
   output: z.ZodTypeAny,
-  options: AIFunctionExecutorOptions
+  options: AIFunctionBuilderOptions
 ) {
   const parametersSchema = zodToJsonSchema(parameters || z.null())
   const outputSchema = zodToJsonSchema(output || z.null())
@@ -38,7 +38,7 @@ async function generateCode(
 
   const { object } = await generateObject({
     model: model,
-    system: `Provide a Node.js function that according to the given function signature.
+    system: `Generate a Node.js function according to the given function signature.
     No comments, external packages are supported. Use function syntax. Your can only respond with code. ${
       options.esModules ? 'Use ES modules syntax.' : ''
     }`,
@@ -64,11 +64,11 @@ export abstract class ExecutorBackend {
   abstract exec(codeContent: CodeContent, params: any)
 }
 
-export default class AIFunctionExecutor {
+export default class AIFunctionBuilder {
   constructor(
     private model: LanguageModelV1,
     private backend: ExecutorBackend,
-    private options: AIFunctionExecutorOptions = {
+    private options: AIFunctionBuilderOptions = {
       debug: false,
       esModules: false,
       cache: true,

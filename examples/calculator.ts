@@ -18,11 +18,11 @@ const output = z.number()
 const f = await ai.function('add values provided', parameters, output)
 
 // Call the function and log the result
-// await f({ a: 1, b: 2 })
-// console.log(result)
+const result = await f({ a: 1, b: 2 })
+console.log(result)
 
 // Call the function 10 times
-for (let i = 0; i < 10; i++) {
-  const result = await f({ a: i, b: i + 1 })
-  console.log(result)
-}
+// for (let i = 0; i < 10; i++) {
+//   const result = await f({ a: i, b: i + 1 })
+//   console.log(result)
+// }
