@@ -48,6 +48,8 @@ More examples found under [examples/](examples/)
 
 Function caching is enabled by default for cost-saving measures. By default, the functions are stored in a file named `.ai-function-executor.json`.
 
+Options you can provide to `AIFunctionBuilder`:
+
 ```ts
 {
   debug?: boolean
@@ -59,7 +61,7 @@ Function caching is enabled by default for cost-saving measures. By default, the
 
 ## Backends
 
-You can create your own backends by implementing the `AIFunctionBackend` class
+You can create your own backends by implementing the `AIFunctionBackend` class:
 
 ```ts
 export abstract class AIFunctionBackend {
