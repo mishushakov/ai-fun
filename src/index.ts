@@ -24,7 +24,7 @@ type CacheContent = {
 async function generateCode(
   model: LanguageModelV1,
   description: string,
-  parameters: z.AnyZodObject,
+  parameters: z.ZodTypeAny,
   output: z.ZodTypeAny,
   options: AIFunctionBuilderOptions
 ) {
@@ -81,7 +81,7 @@ export default class AIFunctionBuilder {
     this.backend = backend
   }
 
-  async function<T extends z.AnyZodObject, O extends z.ZodTypeAny>(
+  async function<T extends z.ZodTypeAny, O extends z.ZodTypeAny>(
     description: string,
     parameters?: T,
     output?: O

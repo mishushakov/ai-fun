@@ -35,7 +35,20 @@ Output:
 3
 ```
 
-## Cache
+More examples found under [examples/](examples/)
+
+## Caching
+
+Function caching is enabled by default for cost-saving measures. By default, the functions are stored in a file named `.ai-function-executor.json`.
+
+```ts
+{
+  debug?: boolean
+  esModules?: boolean
+  cache?: boolean
+  cacheFile?: string
+}
+```
 
 ## Backends
 
@@ -49,3 +62,21 @@ export abstract class AIFunctionBackend {
 ```
 
 See [src/backends/node](src/backends/node) for example.
+
+### Node (exec) backend
+
+Executes the AI-generated functions using `node:vm` exec function.
+
+Options:
+
+```ts
+{
+  debug?: boolean
+  packageFile?: string
+  installPackages?: boolean
+}
+```
+
+## Contribute
+
+As an open-source project, we welcome contributions from the community. If you are experiencing any bugs or want to add some improvements, please feel free to open an issue or pull request.

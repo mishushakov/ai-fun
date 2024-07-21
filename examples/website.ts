@@ -21,15 +21,15 @@ const ai = new AIFunctionBuilder(llm, backend, {
 })
 
 // Define the input parameters of the function
-const parameters = z.object({
-  url: z.string(),
-})
+const parameters = z.string()
+const output = z.string()
 
 // Generate the function
 const f = await ai.function(
-  'use axios to fetch the website and return the text content',
-  parameters
+  'use axios to fetch the website and return its contents',
+  parameters,
+  output
 )
 
 // Call the function to log the result
-await f({ url: 'https://kubernetes.io' })
+console.log(await f('https://kubernetes.io'))
