@@ -1,19 +1,19 @@
 {
   "type": "module",
-  "name": "ai-f",
+  "name": "ai-fun",
   "version": "1.0.0",
-  "description": "AI-F is an experimental LLM-powered function library",
+  "description": "ai-fun is an experimental LLM-powered function library",
   "main": "src/index.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mishushakov/ai-f.git"
+    "url": "git+https://github.com/mishushakov/ai-fun.git"
   },
   "author": "Mish Ushakov <mishushakov@users.noreply.github.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mishushakov/ai-f/issues"
+    "url": "https://github.com/mishushakov/ai-fun/issues"
   },
-  "homepage": "https://github.com/mishushakov/ai-f#readme",
+  "homepage": "https://github.com/mishushakov/ai-fun#readme",
   "dependencies": {
     "ai": "^3.2.32",
     "superjson": "^2.2.1",

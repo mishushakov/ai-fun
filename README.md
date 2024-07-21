@@ -1,9 +1,9 @@
-# ai-f
+# ai-fun
 
-AI-F is an experimental LLM-powered function library. It lets you define the function purpose, the parameters and the output schema and generates and executes the code for you in the background. Think Cursor/GitHub Copilot but as a pluggable library.
+ai-fun is an experimental LLM-powered function library. It lets you define the function purpose, the parameters and the output schema and generates and executes the code for you in the background. Think Cursor/GitHub Copilot but as a pluggable library.
 
 ```
-npm i ai-f
+npm i ai-fun
 ```
 
 Complete example:
@@ -12,8 +12,8 @@ Complete example:
 
 ```ts
 import { z } from 'zod'
-import AIFunctionBuilder from 'ai-f'
-import NodeExec from 'ai-f/src/backends/node'
+import AIFunctionBuilder from 'ai-fun'
+import NodeExec from 'ai-fun/src/backends/node'
 import { anthropic } from '@ai-sdk/anthropic'
 
 // Provide a LLM model
