@@ -1,19 +1,27 @@
 {
   "type": "module",
+  "name": "ai-f",
+  "version": "1.0.0",
+  "description": "AI-F is an experimental LLM-powered function library",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mishushakov/ai-f.git"
+  },
+  "author": "Mish Ushakov <mishushakov@users.noreply.github.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mishushakov/ai-f/issues"
+  },
+  "homepage": "https://github.com/mishushakov/ai-f#readme",
   "dependencies": {
-    "@ai-sdk/anthropic": "^0.0.30",
     "ai": "^3.2.32",
     "superjson": "^2.2.1",
     "zod": "^3.23.8",
     "zod-to-json-schema": "^3.23.1"
   },
-  "scripts": {
-    "build": "tsc",
-    "test": "tsc && node dist/modules.js"
-  },
   "devDependencies": {
-    "@types/node": "^20.14.11",
-    "@types/react": "^18.3.3",
-    "typescript": "^5.5.3"
+    "@ai-sdk/anthropic": "^0.0.30",
+    "@types/node": "^20.14.11"
   }
 }

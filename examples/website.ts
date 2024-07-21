@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import AIFunctionExecutor from '../src'
+import AIFunctionBuilder from '../src'
 import NodeExec from '../src/backends/node'
 import { anthropic } from '@ai-sdk/anthropic'
 
@@ -13,7 +13,7 @@ const backend = new NodeExec({
 })
 
 // Create a new AI Function Executor
-const ai = new AIFunctionExecutor(llm, backend, {
+const ai = new AIFunctionBuilder(llm, backend, {
   debug: true,
   esModules: false,
   cache: true,
@@ -22,11 +22,14 @@ const ai = new AIFunctionExecutor(llm, backend, {
 
 // Define the input parameters of the function
 const parameters = z.object({
-  url: z.string()
+  url: z.string(),
 })
 
 // Generate the function
-const f = await ai.function('use axios to fetch the website and return the text content', parameters)
+const f = await ai.function(
+  'use axios to fetch the website and return the text content',
+  parameters
+)
 
 // Call the function to log the result
 await f({ url: 'https://kubernetes.io' })

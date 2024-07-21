@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import AIFunctionExecutor from '../src'
+import AIFunctionBuilder from '../src'
 import NodeExec from '../src/backends/node'
 import { anthropic } from '@ai-sdk/anthropic'
 
@@ -13,7 +13,7 @@ const backend = new NodeExec({
 })
 
 // Create a new AI Function Executor
-const ai = new AIFunctionExecutor(llm, backend, {
+const ai = new AIFunctionBuilder(llm, backend, {
   debug: true,
   esModules: true,
   cache: true,

@@ -3,7 +3,7 @@ import superjson from 'superjson'
 import { exec } from 'node:child_process'
 import path from 'node:path'
 import fs from 'fs/promises'
-import { ExecutorBackend, CodeContent } from '../index.js'
+import { AIFunctionBackend, CodeContent } from '../index.js'
 
 type NodeExecOptions = {
   debug?: boolean
@@ -42,18 +42,18 @@ async function installPackages(
   }
 }
 
-export default class NodeExec extends ExecutorBackend {
+export default class NodeExec implements AIFunctionBackend {
+  private script: vm.Script
   constructor(
     private options: NodeExecOptions = {
       packageFile: 'package.json',
       installPackages: true,
     }
   ) {
-    super()
     this.options = options
   }
 
-  async exec(codeContent: CodeContent, params: any) {
+  async init(codeContent: CodeContent) {
     if (codeContent.npmModules.length > 0 && this.options.installPackages) {
       await installPackages(
         codeContent.npmModules,
@@ -62,8 +62,14 @@ export default class NodeExec extends ExecutorBackend {
       )
     }
 
-    const script = new vm.Script(codeContent.code)
-    script.runInThisContext()
-    return vm.runInThisContext(`f(${superjson.stringify(params)})`)
+    this.script = new vm.Script(codeContent.code.trim())
+    this.script.runInThisContext()
+  }
+
+  async exec(params: any) {
+    const serialized = superjson.serialize(params)
+    if (this.options.debug)
+      console.log('Running with parameters:', JSON.stringify(serialized.json))
+    return vm.runInThisContext(`f(${JSON.stringify(serialized.json)})`)
   }
 }

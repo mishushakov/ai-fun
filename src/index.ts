@@ -44,7 +44,7 @@ async function generateCode(
     }`,
     prompt: `
     // ${description}
-    f(params: ${superjson.stringify(parametersSchema)}): ${JSON.stringify(
+    f(params: ${JSON.stringify(parametersSchema)}): ${JSON.stringify(
       outputSchema
     )}
     `,
@@ -60,14 +60,15 @@ async function generateCode(
   return object
 }
 
-export abstract class ExecutorBackend {
-  abstract exec(codeContent: CodeContent, params: any)
+export abstract class AIFunctionBackend {
+  abstract init(codeContent: CodeContent): Promise<void>
+  abstract exec(params: any): Promise<any>
 }
 
 export default class AIFunctionBuilder {
   constructor(
     private model: LanguageModelV1,
-    private backend: ExecutorBackend,
+    private backend: AIFunctionBackend,
     private options: AIFunctionBuilderOptions = {
       debug: false,
       esModules: false,
@@ -125,8 +126,10 @@ export default class AIFunctionBuilder {
       console.log('packages', codeContent.npmModules)
     }
 
+    await this.backend.init(codeContent)
+
     return async (params?: z.infer<T>): Promise<z.infer<O>> => {
-      return this.backend.exec(codeContent, params)
+      return this.backend.exec(params)
     }
   }
 }
