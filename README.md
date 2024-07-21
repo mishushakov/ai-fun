@@ -2,7 +2,13 @@
 
 AI-F is an experimental LLM-powered function library. It lets you define the function purpose, the parameters and the output schema and generates and executes the code for you in the background. Think Cursor/GitHub Copilot but as a pluggable library.
 
+```
+npm i ai-f
+```
+
 Complete example:
+
+`example.ts`
 
 ```ts
 import { z } from 'zod'
@@ -32,6 +38,7 @@ console.log(result)
 Output:
 
 ```sh
+> bun example.ts
 3
 ```
 
