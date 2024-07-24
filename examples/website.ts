@@ -17,7 +17,7 @@ const ai = new AIFunctionBuilder(llm, backend, {
   debug: true,
   esModules: false,
   cache: true,
-  cacheFile: '.ai-function-executor.json',
+  cacheFile: '.ai-fun.json',
 })
 
 // Define the input parameters of the function
@@ -26,7 +26,7 @@ const output = z.string()
 
 // Generate the function
 const f = await ai.function(
-  'use axios to fetch the website and return its contents',
+  'use fetch to grab the website and return its contents',
   parameters,
   output
 )

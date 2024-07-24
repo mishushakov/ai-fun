@@ -42,8 +42,10 @@ async function installPackages(
   }
 }
 
+global.require = require
+
 export default class NodeExec implements AIFunctionBackend {
-  private script: vm.Script
+  // private ctx: vm.Context
   constructor(
     private options: NodeExecOptions = {
       packageFile: 'package.json',
@@ -62,8 +64,12 @@ export default class NodeExec implements AIFunctionBackend {
       )
     }
 
-    this.script = new vm.Script(codeContent.code.trim())
-    this.script.runInThisContext()
+    // this.ctx = vm.createContext({
+    //   require: require,
+    //   console: console,
+    // })
+
+    vm.runInThisContext(codeContent.code.trim())
   }
 
   async exec(params: any) {

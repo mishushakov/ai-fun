@@ -46,7 +46,7 @@ More examples found under [examples/](examples/)
 
 ## Caching
 
-Function caching is enabled by default for cost-saving measures. By default, the functions are stored in a file named `.ai-function-executor.json`.
+Function caching is enabled by default for cost-saving measures. By default, the functions are stored in a file named `.ai-fun.json`.
 
 Options you can provide to `AIFunctionBuilder`:
 

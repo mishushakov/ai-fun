@@ -15,9 +15,8 @@ const backend = new NodeExec({
 // Create a new AI Function Executor
 const ai = new AIFunctionBuilder(llm, backend, {
   debug: true,
-  esModules: true,
   cache: true,
-  cacheFile: '.ai-function-executor.json',
+  cacheFile: '.ai-fun.json',
 })
 
 // Define the input parameters of the function

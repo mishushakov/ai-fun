@@ -2,7 +2,6 @@ import { LanguageModelV1 } from '@ai-sdk/provider'
 import { generateObject } from 'ai'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import superjson from 'superjson'
 import fs from 'fs/promises'
 
 type AIFunctionBuilderOptions = {
@@ -33,15 +32,15 @@ async function generateCode(
 
   const systemSchema = z.object({
     code: z.string(),
-    npmModules: z.array(z.string()),
+    npmModules: z.array(z.string().describe('only for list non built-in modules')),
   })
 
   const { object } = await generateObject({
     model: model,
     system: `Generate a Node.js function according to the given function signature.
-    No comments, external packages are supported. Use function syntax. Your can only respond with code. ${
-      options.esModules ? 'Use ES modules syntax.' : ''
-    }`,
+    No comments, external packages are supported, use function syntax, no exports, syntax: "${
+      options.esModules ? 'import' : 'commonjs'
+    }". Your can only respond with code.`,
     prompt: `
     // ${description}
     f(params: ${JSON.stringify(parametersSchema)}): ${JSON.stringify(
@@ -73,7 +72,7 @@ export default class AIFunctionBuilder {
       debug: false,
       esModules: false,
       cache: true,
-      cacheFile: '.ai-function-executor.json',
+      cacheFile: '.ai-fun.json',
     }
   ) {
     this.model = model
