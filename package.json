@@ -16,9 +16,6 @@
   "homepage": "https://github.com/mishushakov/ai-fun#readme",
   "dependencies": {
     "ai": "^3.2.32",
-    "fs": "^0.0.1-security",
-    "node-fetch": "^3.3.2",
-    "pino": "^9.3.1",
     "superjson": "^2.2.1",
     "zod": "^3.23.8",
     "zod-to-json-schema": "^3.23.1"
